@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import api from '../utils/api';
 import ListingCard from '../components/ListingCard';
 
@@ -13,7 +13,7 @@ function Home() {
   const [condition, setCondition] = useState('All');
   const [sort, setSort] = useState('newest');
 
-  const fetchListings = async () => {
+  const fetchListings = useCallback(async () => {
     setLoading(true);
     try {
       const params = {};
@@ -28,10 +28,9 @@ function Home() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [category, condition, sort, search]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { fetchListings(); }, [category, condition, sort, fetchListings]);
+  useEffect(() => { fetchListings(); }, [fetchListings]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -40,7 +39,6 @@ function Home() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
-      {/* Search Bar */}
       <form onSubmit={handleSearch} className="flex gap-2 mb-6">
         <input
           value={search}
@@ -53,7 +51,6 @@ function Home() {
         </button>
       </form>
 
-      {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-6">
         <select value={category} onChange={(e) => setCategory(e.target.value)}
           className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -71,7 +68,6 @@ function Home() {
         </select>
       </div>
 
-      {/* Listings Grid */}
       {loading ? (
         <div className="text-center py-20 text-gray-400">Loading listings...</div>
       ) : listings.length === 0 ? (
