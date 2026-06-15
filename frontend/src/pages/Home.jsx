@@ -30,6 +30,7 @@ function Home() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchListings(); }, [category, condition, sort]);
 
   const handleSearch = (e) => {
