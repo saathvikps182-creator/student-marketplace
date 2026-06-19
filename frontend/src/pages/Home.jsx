@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../utils/api';
 import ListingCard from '../components/ListingCard';
 
+
 const CATEGORIES = ['All', 'Books', 'Electronics', 'Furniture', 'Clothing', 'Cycles & Sports', 'Stationery', 'Other'];
 const CONDITIONS = ['All', 'New', 'Good', 'Fair', 'Poor'];
 
