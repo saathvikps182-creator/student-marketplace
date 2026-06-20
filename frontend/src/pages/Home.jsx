@@ -5,6 +5,7 @@ import ListingCard from '../components/ListingCard';
 const CATEGORIES = ['All', 'Books', 'Electronics', 'Furniture', 'Clothing', 'Cycles & Sports', 'Stationery', 'Other'];
 const CONDITIONS = ['All', 'New', 'Good', 'Fair', 'Poor'];
 
+
 function Home() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
