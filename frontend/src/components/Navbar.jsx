@@ -17,7 +17,7 @@ function Navbar() {
           CampusMart
         </Link>
         <div className="flex gap-5 items-center text-sm">
-          <Link to="/" className="text-ink/70 hover:text-clay transition-colors">Browse</Link>
+          <Link to="/" className="text-ink/70 hover:text-clay transition-colors">Home</Link>
           {user ? (
             <>
               <Link to="/create" className="text-ink/70 hover:text-clay transition-colors">Sell</Link>
