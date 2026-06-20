@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 
+const USN_REGEX = /^0[12]JST\d{2}[A-Z]{3}\d{3}$/;
+
 function Register() {
   const [form, setForm] = useState({ name: '', email: '', usn: '', password: '', college_name: '' });
   const [error, setError] = useState('');
@@ -10,11 +12,20 @@ function Register() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const value = e.target.name === 'usn' ? e.target.value.toUpperCase() : e.target.value;
+    setForm({ ...form, [e.target.name]: value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (!USN_REGEX.test(form.usn)) {
+      setError('USN must be in the format 01JST24UIS074 (campus code 01 or 02)');
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await api.post('/auth/register', form);
@@ -53,9 +64,10 @@ function Register() {
           <div>
             <label className="block text-xs uppercase tracking-wide text-ink/50 mb-1.5">USN</label>
             <input name="usn" value={form.usn} onChange={handleChange}
+              maxLength={13}
               className="w-full bg-transparent border-b border-sand px-1 py-2 text-ink focus:outline-none focus:border-clay transition-colors"
-              placeholder="e.g. 4PS22IS045" required />
-            <p className="text-xs text-ink/35 mt-1.5 italic">Your college roll number</p>
+              placeholder="e.g. 01JST24UIS074" required />
+            <p className="text-xs text-ink/35 mt-1.5 italic">Format: campus(01/02) + JST + year + dept + roll no.</p>
           </div>
           <div>
             <label className="block text-xs uppercase tracking-wide text-ink/50 mb-1.5">College Name</label>
