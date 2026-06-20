@@ -28,30 +28,36 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-xl shadow w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">Login to CampusMart</h2>
-        {error && <p className="bg-red-100 text-red-600 p-3 rounded mb-4 text-sm">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-paper px-4">
+      <div className="w-full max-w-sm">
+        <h2 className="font-serif text-3xl text-ink text-center mb-1">Welcome back</h2>
+        <p className="text-ink/50 text-sm text-center mb-8">Sign in to your CampusMart account</p>
+
+        {error && (
+          <p className="border border-clay/40 text-clay bg-clay/5 px-3 py-2 rounded-sm mb-5 text-sm">{error}</p>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-xs uppercase tracking-wide text-ink/50 mb-1.5">Email</label>
             <input name="email" type="email" value={form.email} onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full bg-transparent border-b border-sand px-1 py-2 text-ink focus:outline-none focus:border-clay transition-colors"
               placeholder="your@email.com" required />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-xs uppercase tracking-wide text-ink/50 mb-1.5">Password</label>
             <input name="password" type="password" value={form.password} onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full bg-transparent border-b border-sand px-1 py-2 text-ink focus:outline-none focus:border-clay transition-colors"
               placeholder="minimum 8 characters" required />
           </div>
           <button type="submit" disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50">
-            {loading ? 'Logging in...' : 'Login'}
+            className="w-full bg-ink text-paper py-2.5 rounded-sm text-sm uppercase tracking-wide hover:bg-clay transition-colors disabled:opacity-50 mt-2">
+            {loading ? 'Signing in...' : 'Login'}
           </button>
         </form>
-        <p className="text-center text-sm text-gray-500 mt-4">
-          Don't have an account? <Link to="/register" className="text-blue-600 hover:underline">Register</Link>
+
+        <p className="text-center text-sm text-ink/50 mt-6">
+          Don't have an account? <Link to="/register" className="text-clay hover:underline">Register</Link>
         </p>
       </div>
     </div>
