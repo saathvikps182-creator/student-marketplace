@@ -6,7 +6,7 @@ const CATEGORIES = ['Books', 'Electronics', 'Furniture', 'Clothing', 'Cycles & S
 const CONDITIONS = ['New', 'Good', 'Fair', 'Poor'];
 
 function CreateListing() {
-  const [form, setForm] = useState({ title: '', description: '', category: '', condition: '', price: '', location: '' });
+  const [form, setForm] = useState({ title: '', description: '', category: '', condition: '', original_price: '', price: '', location: '' });
   const [images, setImages] = useState([]);
   const [suggested, setSuggested] = useState(null);
   const [error, setError] = useState('');
@@ -16,9 +16,11 @@ function CreateListing() {
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const getSuggestion = async () => {
-    if (!form.category || !form.condition) return;
+    if (!form.condition || !form.original_price) return;
     try {
-      const res = await api.get('/price/suggest', { params: { category: form.category, condition: form.condition } });
+      const res = await api.get('/price/suggest', {
+        params: { condition: form.condition, original_price: form.original_price }
+      });
       setSuggested(res.data);
     } catch (err) {
       console.error(err);
@@ -75,7 +77,6 @@ function CreateListing() {
           <div>
             <label className={labelClass}>Category</label>
             <select name="category" value={form.category} onChange={handleChange}
-              onBlur={getSuggestion}
               className={inputClass} required>
               <option value="">Select category</option>
               {CATEGORIES.map(c => <option key={c}>{c}</option>)}
@@ -90,6 +91,15 @@ function CreateListing() {
               {CONDITIONS.map(c => <option key={c}>{c}</option>)}
             </select>
           </div>
+        </div>
+
+        <div>
+          <label className={labelClass}>Original Price — what you paid (₹)</label>
+          <input name="original_price" type="number" value={form.original_price} onChange={handleChange}
+            onBlur={getSuggestion}
+            className={inputClass}
+            placeholder="e.g. 40000" required />
+          <p className="text-xs text-ink/35 mt-1.5 italic">Used to suggest a fair resale price based on condition.</p>
         </div>
 
         {suggested && (
