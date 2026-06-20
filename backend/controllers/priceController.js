@@ -1,5 +1,3 @@
-const pool = require('../config/db');
-
 const multipliers = {
   New:  { min: 0.85, max: 0.95 },
   Good: { min: 0.60, max: 0.75 },
@@ -7,32 +5,28 @@ const multipliers = {
   Poor: { min: 0.15, max: 0.30 }
 };
 
-// GET /api/price/suggest?category=Electronics&condition=Good
+// GET /api/price/suggest?condition=Good&original_price=40000
 const suggestPrice = async (req, res) => {
-  const { category, condition } = req.query;
+  const { condition, original_price } = req.query;
 
-  if (!category || !condition) {
-    return res.status(400).json({ message: 'Category and condition are required' });
+  if (!condition || !original_price) {
+    return res.status(400).json({ message: 'Condition and original_price are required' });
   }
   if (!multipliers[condition]) {
     return res.status(400).json({ message: 'Invalid condition. Use: New, Good, Fair, Poor' });
   }
 
+  const price = Number(original_price);
+  if (isNaN(price) || price <= 0) {
+    return res.status(400).json({ message: 'original_price must be a positive number' });
+  }
+
   try {
-    const result = await pool.query(
-      'SELECT base_price_min, base_price_max FROM price_reference WHERE category = $1',
-      [category]
-    );
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Category not found in price reference' });
-    }
-
-    const { base_price_min, base_price_max } = result.rows[0];
     const m = multipliers[condition];
-    const suggested_min = Math.round(base_price_min * m.min);
-    const suggested_max = Math.round(base_price_max * m.max);
+    const suggested_min = Math.round(price * m.min);
+    const suggested_max = Math.round(price * m.max);
 
-    res.json({ category, condition, suggested_min, suggested_max });
+    res.json({ condition, original_price: price, suggested_min, suggested_max });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
