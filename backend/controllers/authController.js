@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const USN_REGEX = /^[0-9][A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{3}$/;
+const USN_REGEX = /^0[12]JST\d{2}[A-Z]{3}\d{3}$/;
 
 // POST /api/auth/register
 const register = async (req, res) => {
@@ -13,7 +13,7 @@ const register = async (req, res) => {
     return res.status(400).json({ message: 'All fields are required' });
   }
   if (!USN_REGEX.test(usn)) {
-    return res.status(400).json({ message: 'Invalid USN format. Example: 4PS22CS045' });
+    return res.status(400).json({ message: 'Invalid USN format. Example: 01JST24UIS074' });
   }
   if (password.length < 8) {
     return res.status(400).json({ message: 'Password must be at least 8 characters' });
