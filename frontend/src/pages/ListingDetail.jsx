@@ -121,6 +121,7 @@ function ListingDetail() {
           <div className="border-t border-sand mt-5 pt-4 space-y-1">
             {listing.location && <p className="text-sm text-ink/50">Location — {listing.location}</p>}
             <p className="text-sm text-ink/50">Listed by {listing.seller_name} ({listing.seller_usn})</p>
+            {listing.seller_phone && <p className="text-sm text-ink/50">Contact — {listing.seller_phone}</p>}
           </div>
 
           {/* Actions */}
