@@ -4,16 +4,19 @@ import { useAuth } from '../context/AuthContext';
 import api from '../utils/api';
 
 const USN_REGEX = /^0[12]JST\d{2}[A-Z]{3}\d{3}$/;
+const PHONE_REGEX = /^[6-9]\d{9}$/;
 
 function Register() {
-  const [form, setForm] = useState({ name: '', email: '', usn: '', password: '', college_name: '' });
+  const [form, setForm] = useState({ name: '', email: '', usn: '', phone: '', password: '', college_name: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const value = e.target.name === 'usn' ? e.target.value.toUpperCase() : e.target.value;
+    let value = e.target.value;
+    if (e.target.name === 'usn') value = value.toUpperCase();
+    if (e.target.name === 'phone') value = value.replace(/\D/g, '').slice(0, 10);
     setForm({ ...form, [e.target.name]: value });
   };
 
@@ -23,6 +26,10 @@ function Register() {
 
     if (!USN_REGEX.test(form.usn)) {
       setError('USN must be in the format 01JST24UIS074 (campus code 01 or 02)');
+      return;
+    }
+    if (!PHONE_REGEX.test(form.phone)) {
+      setError('Enter a valid 10-digit phone number starting with 6-9');
       return;
     }
 
@@ -68,6 +75,14 @@ function Register() {
               className="w-full bg-transparent border-b border-sand px-1 py-2 text-ink focus:outline-none focus:border-clay transition-colors"
               placeholder="e.g. 01JST24UIS074" required />
             <p className="text-xs text-ink/35 mt-1.5 italic">Format: campus(01/02) + JST + year + dept + roll no.</p>
+          </div>
+          <div>
+            <label className="block text-xs uppercase tracking-wide text-ink/50 mb-1.5">Phone Number</label>
+            <input name="phone" type="tel" value={form.phone} onChange={handleChange}
+              maxLength={10}
+              className="w-full bg-transparent border-b border-sand px-1 py-2 text-ink focus:outline-none focus:border-clay transition-colors"
+              placeholder="e.g. 9876543210" required />
+            <p className="text-xs text-ink/35 mt-1.5 italic">Shown to buyers so they can contact you directly.</p>
           </div>
           <div>
             <label className="block text-xs uppercase tracking-wide text-ink/50 mb-1.5">College Name</label>
